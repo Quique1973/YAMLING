@@ -1,373 +1,194 @@
-views:
-  - title: Home
-    path: grid
-    cards:
-      - type: custom:mushroom-chips-card
-        chips:
-          - type: action
-            icon: mdi:weather-sunny
-            icon_color: '#33ffff'
-            tap_action:
-              action: call-service
-              service: scene.turn_on
-              target:
-                entity_id: scene.work_morning
-            card_mod:
-              style: |
-                ha-card {
-                  justify-content: center;
-                  --chip-icon-size: 90px;
-                  --chip-height: 100px;
-                  width: var(--chip-height) !important;
-                  border-radius: 50% !important;
-                 # --chip-background: rgba(228, 208, 10, 0.1);
-                }
-          - type: action
-            icon: mdi:heat-wave
-            icon_color: '#ffbb33'
-            tap_action:
-              action: call-service
-              service: scene.turn_on
-              target:
-                entity_id: scene.evening
-            card_mod:
-              style: |
-                ha-card {
-                  justify-content: center;
-                  --chip-icon-size: 90px;
-                  --chip-height: 100px;
-                  width: var(--chip-height) !important;
-                  border-radius: 50% !important;
-                 # --chip-background: rgba(228, 208, 10, 0.1);
-                }
-          - type: action
-            icon: mdi:television
-            icon_color: '#3344ff'
-            tap_action:
-              action: call-service
-              service: scene.turn_on
-              target:
-                entity_id: scene.tv_time
-            card_mod:
-              style: |
-                ha-card {
-                  justify-content: center;
-                  --chip-icon-size: 90px;
-                  --chip-height: 100px;
-                  width: var(--chip-height) !important;
-                  border-radius: 50% !important;
-                 # --chip-background: rgba(228, 208, 10, 0.1);
-                }
-          - type: action
-            icon: mdi:gas-burner
-            icon_color: '#eebbff'
-            tap_action:
-              action: call-service
-              service: scene.turn_on
-              target:
-                entity_id: scene.warm_kitchen
-            card_mod:
-              style: |
-                ha-card {
-                  justify-content: center;
-                  --chip-icon-size: 90px;
-                  --chip-height: 100px;
-                  width: var(--chip-height) !important;
-                  border-radius: 50% !important;
-                 # --chip-background: rgba(228, 208, 10, 0.1);
-                }
-          - type: action
-            tap_action:
-              action: call-service
-              service: scene.turn_on
-              target:
-                entity_id: scene.cooking_time
-            icon: mdi:chef-hat
-            icon_color: '#ffffff'
-            card_mod:
-              style: |
-                ha-card {
-                  justify-content: center;
-                  --chip-icon-size: 90px;
-                  --chip-height: 100px;
-                  width: var(--chip-height) !important;
-                  border-radius: 50% !important;
-                 # --chip-background: rgba(228, 208, 10, 0.1);
-                }
-          - type: action
-            tap_action:
-              action: call-service
-              service: scene.turn_on
-              target:
-                entity_id: scene.lights_off
-            icon: mdi:power
-            icon_color: '#ff0000'
-            card_mod:
-              style: |
-                ha-card {
-                  justify-content: center;
-                  --chip-icon-size: 90px;
-                  --chip-height: 100px;
-                  width: var(--chip-height) !important;
-                  border-radius: 50% !important;
-                 # --chip-background: rgba(228, 208, 10, 0.1);
-                }
-          - type: conditional
-            conditions:
-              - entity: sensor.devices_with_low_battery
-                state_not: '0'
-            chip:
-              type: template
-              entity: sensor.devices_with_low_battery
-              icon_color: red
-              icon: mdi:battery-alert
-              content: '{{ states(entity) }}'
-              tap_action:
-                action: fire-dom-event
-                browser-mod:
-                  service: browser_mod.popup
-                  data:
-                    title: Battery Levels
-                    content:
-                      type: custom:auto-entities
-                      filter:
-                        include:
-                          - attributes:
-                              device_class: battery
-                            state: < 30
-                            options:
-                              type: custom:mushroom-template-card
-                              primary: '{{ states(entity) }}%'
-                              secondary: >-
-                                {{ state_attr(entity, 'friendly_name') | title
-                                }}
-                              icon: >
-                                {% set battery_level = (states(entity) | int /
-                                10) | round(0) | int * 10 %} {% if battery_level
-                                == 100 %}
-                                  mdi:battery
-                                {% elif battery_level > 0%}
-                                  mdi:battery-{{ battery_level }}
-                                {% else %}
-                                  mdi:battery-outline
-                                {% endif %}
-                              icon_color: |-
-                                {% set battery_level = states(entity) | int %}
-                                {% if battery_level > 90 %}
-                                  green
-                                {% elif battery_level > 60 %}
-                                  light-green
-                                {% elif battery_level > 50 %}
-                                  lime
-                                {% elif battery_level > 40 %}
-                                  yellow
-                                {% elif battery_level > 30 %}
-                                  amber
-                                {% elif battery_level > 20 %}
-                                  orange
-                                {% elif battery_level > 10 %}
-                                  deep-orange
-                                {% else %}
-                                  red
-                                {% endif %}
-                              layout: horizontal
-                              tap_action:
-                                action: none
-                              badge_icon: |-
-                                {% set battery_level = states(entity) | int %}
-                                {% if battery_level < 10 %}
-                                  mdi:exclamation-thick
-                                {% endif %}
-                              badge_color: red
-                        exclude: null
-                      show_empty: false
-                      card:
-                        type: custom:layout-card
-                        cards: []
-                        layout_type: masonry
-                      sort:
-                        method: friendly_name'''
-                    card_mod: null
-              card_mod:
-                style: |
-                  ha-card {
-                    justify-content: center;
-                    --chip-icon-size: 90px;
-                    --chip-height: 100px;
-                    width: var(--chip-height) !important;
-                    border-radius: 50% !important;
-                   # --chip-background: rgba(228, 208, 10, 0.1);
-                  }
-        view_layout:
-          grid-area: header
-      - type: vertical-stack
-        cards:
-          - type: custom:digital-clock
-            locale: en-gb
-            dateFormat:
-              weekday: long
-              day: 2-digit
-              month: short
-            timeFormat:
-              hour: 2-digit
-              minute: 2-digit
-          - type: horizontal-stack
-            cards:
-              - type: custom:mushroom-climate-card
-                entity: climate.a_c
-                fill_container: false
-                show_temperature_control: true
-                name: A/C
-                hvac_modes:
-                  - cool
-                collapsible_controls: false
-              - type: custom:mushroom-vacuum-card
-                entity: vacuum.the_idiot
-                commands:
-                  - on_off
-                  - start_pause
-                  - return_home
-        view_layout:
-          grid-area: footer
-      - type: horizontal-stack
-        cards:
-          - type: vertical-stack
-            cards:
-              - show_name: true
-                show_icon: true
-                type: button
-                tap_action:
-                  action: toggle
-                entity: switch.none_kitchen_one
-                name: Kitchen 1
-                icon: mdi:led-strip-variant
-                show_state: true
-                state_color: true
-                card_mod:
-                  style: |
-                    ha-card {
-                      justify-content: center;
-                      --chip-icon-size: 150px;
-                      --chip-height: 200px;
-                      width: var(--chip-height) !important;
-                      border-radius: 50% !important;
-                     # --chip-background: rgba(228, 208, 10, 0.1);
-                    }        
-              - show_name: true
-                show_icon: true
-                type: button
-                tap_action:
-                  action: toggle
-                entity: switch.none_p300_kitchen_three
-                name: Kitchen 3
-                show_state: true
-                state_color: true
-                icon: mdi:lamp
-                card_mod:
-                  style: |
-                    ha-card {
-                      justify-content: center;
-                      --chip-icon-size: 150px;
-                      --chip-height: 200px;
-                      width: var(--chip-height) !important;
-                      border-radius: 50% !important;
-                     # --chip-background: rgba(228, 208, 10, 0.1);
-                    }        
-        view_layout:
-          grid-area: left
-      - type: horizontal-stack
-        cards:
-          - type: vertical-stack
-            cards:
-              - type: custom:mushroom-light-card
-                entity: light.little_light
-                show_brightness_control: true
-                layout: horizontal
-                use_light_color: true
-                show_color_control: true
-                name: Little Light
-                tap_action:
-                  action: toggle
-                double_tap_action:
-                  action: more-info
-                fill_container: false
-              - type: custom:mushroom-light-card
-                entity: light.living_light
-                show_brightness_control: true
-                layout: horizontal
-                use_light_color: true
-                show_color_control: true
-                name: TV Light
-                tap_action:
-                  action: toggle
-                double_tap_action:
-                  action: more-info
-                fill_container: false
-              - type: custom:mushroom-light-card
-                entity: light.big_light
-                show_brightness_control: true
-                layout: horizontal
-                use_light_color: true
-                show_color_control: true
-                name: Big Light
-                tap_action:
-                  action: toggle
-                double_tap_action:
-                  action: more-info
-                fill_container: false
-              - type: custom:mushroom-light-card
-                entity: light.kitchen_corner
-                show_brightness_control: true
-                layout: horizontal
-                use_light_color: true
-                show_color_control: true
-                name: Kitchen Corner
-                tap_action:
-                  action: toggle
-                double_tap_action:
-                  action: more-info
-                fill_container: false
-              - type: custom:mushroom-light-card
-                entity: light.dining_light
-                show_brightness_control: true
-                layout: horizontal
-                use_light_color: true
-                show_color_control: true
-                name: Dining Light
-                tap_action:
-                  action: toggle
-                double_tap_action:
-                  action: more-info
-                fill_container: false
-        view_layout:
-          grid-area: middle
-    type: custom:grid-layout
-    layout:
-      grid-template-columns: 33% auto 33%
-      grid-template-rows: auto
-      grid-template-areas: |
-        "header header header"
-        ". messages ."
-        "left middle middle"
-        "footer footer footer"
-      mediaquery:
-        '(max-width: 390px)':
-          grid-template-columns: 100%
-          grid-template-areas: |
-            "header"
-            "header"
-            "messages"
-            "left"
-            "right"
-            "middle"
-            "footer"
-        '(max-width: 800px)':
-          grid-template-columns: 50% 50%
-          grid-template-areas: |
-            "header header"
-            "header"
-            "messages messages"
-            "left right"
-            "middle middle"
-            "footer footer"
-    icon: mdi:account-cowboy-hat
+type: custom:mushroom-chips-card
+chips:
+  - type: action
+    icon: mdi:weather-sunny
+    icon_color: '#33ffff'
+    tap_action:
+      action: call-service
+      service: scene.turn_on
+      target:
+        entity_id: scene.work_morning
+    card_mod:
+      style: |
+        ha-card {
+          justify-content: center;
+          --chip-icon-size: 90px;
+          --chip-height: 100px;
+          width: var(--chip-height) !important;
+          border-radius: 50% !important;
+         # --chip-background: rgba(228, 208, 10, 0.1);
+        }
+  - type: action
+    icon: mdi:heat-wave
+    icon_color: '#ffbb33'
+    tap_action:
+      action: call-service
+      service: scene.turn_on
+      target:
+        entity_id: scene.evening
+    card_mod:
+      style: |
+        ha-card {
+          justify-content: center;
+          --chip-icon-size: 90px;
+          --chip-height: 100px;
+          width: var(--chip-height) !important;
+          border-radius: 50% !important;
+         # --chip-background: rgba(228, 208, 10, 0.1);
+        }
+  - type: action
+    icon: mdi:television
+    icon_color: '#3344ff'
+    tap_action:
+      action: call-service
+      service: scene.turn_on
+      target:
+        entity_id: scene.tv_time
+    card_mod:
+      style: |
+        ha-card {
+          justify-content: center;
+          --chip-icon-size: 90px;
+          --chip-height: 100px;
+          width: var(--chip-height) !important;
+          border-radius: 50% !important;
+         # --chip-background: rgba(228, 208, 10, 0.1);
+        }
+  - type: action
+    icon: mdi:gas-burner
+    icon_color: '#eebbff'
+    tap_action:
+      action: call-service
+      service: scene.turn_on
+      target:
+        entity_id: scene.warm_kitchen
+    card_mod:
+      style: |
+        ha-card {
+          justify-content: center;
+          --chip-icon-size: 90px;
+          --chip-height: 100px;
+          width: var(--chip-height) !important;
+          border-radius: 50% !important;
+         # --chip-background: rgba(228, 208, 10, 0.1);
+        }
+  - type: action
+    tap_action:
+      action: toggle
+      entity: scene.cooking_time
+    icon: mdi:chef-hat
+    icon_color: '#ffffff'
+    card_mod:
+      style: |
+        ha-card {
+          justify-content: center;
+          --chip-icon-size: 90px;
+          --chip-height: 100px;
+          width: var(--chip-height) !important;
+          border-radius: 50% !important;
+         # --chip-background: rgba(228, 208, 10, 0.1);
+        }
+  - type: action
+    tap_action:
+      action: call-service
+      service: scene.turn_on
+      target:
+        entity_id: scene.lights_off
+    icon: mdi:power
+    icon_color: '#ff0000'
+    name: All Lights Off
+    card_mod:
+      style: |
+        ha-card {
+          justify-content: center;
+          --chip-icon-size: 90px;
+          --chip-height: 100px;
+          width: var(--chip-height) !important;
+          border-radius: 50% !important;
+         # --chip-background: rgba(228, 208, 10, 0.1);
+        }
+  - type: conditional
+    conditions:
+      - entity: sensor.devices_with_low_battery
+        state_not: '0'
+    chip:
+      type: template
+      entity: sensor.devices_with_low_battery
+      icon_color: red
+      icon: mdi:battery-alert
+      content: '{{ states(entity) }}'
+      tap_action:
+        action: fire-dom-event
+        browser-mod:
+          service: browser_mod.popup
+          data:
+            title: Battery Levels
+            content:
+              type: custom:auto-entities
+              filter:
+                include:
+                  - attributes:
+                      device_class: battery
+                    state: < 30
+                    options:
+                      type: custom:mushroom-template-card
+                      primary: '{{ states(entity) }}%'
+                      secondary: '{{ state_attr(entity, ''friendly_name'') | title }}'
+                      icon: >
+                        {% set battery_level = (states(entity) | int / 10) |
+                        round(0) | int * 10 %} {% if battery_level == 100 %}
+                          mdi:battery
+                        {% elif battery_level > 0%}
+                          mdi:battery-{{ battery_level }}
+                        {% else %}
+                          mdi:battery-outline
+                        {% endif %}
+                      icon_color: |-
+                        {% set battery_level = states(entity) | int %}
+                        {% if battery_level > 90 %}
+                          green
+                        {% elif battery_level > 60 %}
+                          light-green
+                        {% elif battery_level > 50 %}
+                          lime
+                        {% elif battery_level > 40 %}
+                          yellow
+                        {% elif battery_level > 30 %}
+                          amber
+                        {% elif battery_level > 20 %}
+                          orange
+                        {% elif battery_level > 10 %}
+                          deep-orange
+                        {% else %}
+                          red
+                        {% endif %}
+                      layout: horizontal
+                      tap_action:
+                        action: none
+                      badge_icon: |-
+                        {% set battery_level = states(entity) | int %}
+                        {% if battery_level < 10 %}
+                          mdi:exclamation-thick
+                        {% endif %}
+                      badge_color: red
+                exclude: null
+              show_empty: false
+              card:
+                type: custom:layout-card
+                cards: []
+                layout_type: masonry
+              sort:
+                method: friendly_name'''
+            card_mod: null
+      card_mod:
+        style: |
+          ha-card {
+            justify-content: center;
+            --chip-icon-size: 90px;
+            --chip-height: 100px;
+            width: var(--chip-height) !important;
+            border-radius: 50% !important;
+           # --chip-background: rgba(228, 208, 10, 0.1);
+          }
+view_layout:
+  grid-area: header
