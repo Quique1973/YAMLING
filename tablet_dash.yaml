@@ -2,7 +2,7 @@ title: Home
 icon: mdi:account-cowboy-hat
 type: stack
 views:
-  - type: vertical
+  - type: stack
     cards:
       - type: custom:mushroom-vacuum-card
         entity: vacuum.the_idiot
@@ -13,7 +13,7 @@ views:
           - return_home
       - type: climate
         entity: climate.air_conditioning
-  - type: vertical
+  - type: stack
     cards:
       - type: custom:mushroom-chips-card
         chips:
